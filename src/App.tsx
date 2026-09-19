@@ -6,26 +6,45 @@ import * as goodsAPI from './api/goods';
 
 export const App: React.FC = () => {
   const [goods, setGoods] = useState<Good[]>([]);
+  const [error, setError] = useState('');
 
   const loadAllGoods = () => {
-    goodsAPI.getAll().then(data => {
-      // eslint-disable-next-line no-console
-      console.log(data);
-      setGoods(data);
-    });
+    setError('');
+
+    goodsAPI
+      .getAll()
+      .then(setGoods)
+      .catch(() => {
+        setError('Unable to load goods');
+      });
   };
 
   const load5FirstGoods = () => {
-    goodsAPI.get5First().then(setGoods);
+    setError('');
+
+    goodsAPI
+      .get5First()
+      .then(setGoods)
+      .catch(() => {
+        setError('Unable to load goods');
+      });
   };
 
   const loadRedGoods = () => {
-    goodsAPI.getRedGoods().then(setGoods);
+    setError('');
+
+    goodsAPI
+      .getRedGoods()
+      .then(setGoods)
+      .catch(() => {
+        setError('Unable to load goods');
+      });
   };
 
   return (
     <div className="App">
       <h1>Dynamic list of Goods</h1>
+      {error && <p>{error}</p>}
 
       <button type="button" data-cy="all-button" onClick={loadAllGoods}>
         Load all goods
